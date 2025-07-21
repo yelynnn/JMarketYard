@@ -2,9 +2,10 @@ import React from 'react';
 import Modal from '../../../components/Modal/Modal';
 import styled from 'styled-components';
 import questionVector from '../../../assets/questionVector.png';
-import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../../../apis/axiosInstance';
 import useDeliveryStore from '../../../store/deliveryStore';
+import { useModalContext } from '../../../components/Modal/context/ModalContext';
+import GiveUpOkModal from './GiveUpOkModal';
 
 interface ModalProps {
   onClose: () => void;
@@ -17,8 +18,8 @@ const GiveUpModal: React.FC<ModalProps> = ({
   deliveryId,
   raffleId,
 }) => {
-  const navigate = useNavigate();
   const { setDeliveryStatus } = useDeliveryStore();
+  const { openModal } = useModalContext();
 
   const handleClick = async () => {
     try {
@@ -27,7 +28,7 @@ const GiveUpModal: React.FC<ModalProps> = ({
         {},
       );
       setDeliveryStatus('CANCELLED');
-      navigate(`/raffles/${raffleId}`);
+      openModal(({ onClose }) => <GiveUpOkModal onClose={onClose} />);
     } catch (error) {
       console.error(error);
     } finally {

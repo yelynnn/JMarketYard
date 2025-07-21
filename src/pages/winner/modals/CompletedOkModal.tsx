@@ -12,7 +12,7 @@ interface ModalProps {
 const CompletedOkModal: React.FC<ModalProps> = ({ onClose, deliveryId }) => {
   const navigate = useNavigate();
   return (
-    <Modal onClose={onClose}>
+    <Modal onClose={() => navigate('/')}>
       <Container>
         <Img src={smileVector} />
         <Title>거래가 완료되었습니다.</Title>

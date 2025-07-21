@@ -147,26 +147,32 @@ const LookAroundBox = styled.div`
 `;
 
 const Horizon = styled.hr`
-  width: 100%;
+  width: 1080px;
   border-top: 1px solid #8f8e94;
   margin-top: 42px;
   margin-bottom: 46px;
+
+  ${media.medium`
+    width: 744px;
+  `}
+  ${media.small`
+    width: 390px;
+  `}
 `;
 const ProductGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   place-items: center;
-  gap: 44px;
+  gap: 56px;
   width: 100%;
-  max-width: 1080px;
+
   ${media.medium`
     grid-template-columns: repeat(3, 1fr);
-    gap: 9px;
-    max-width: 100%;
+    gap:11px;
   `}
   ${media.small`
-    grid-template-columns: repeat(2, 1fr);
-    gap: 9px;
+    grid-template-columns: repeat(1, 1fr);
+    gap:0px;
   `}
 `;
 

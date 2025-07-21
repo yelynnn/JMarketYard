@@ -12,9 +12,19 @@ interface ItemProps {
   images: string[];
   name: string;
   children?: ReactNode;
+  onImageClick?: (index: number) => void;
+  isModal?: boolean;
+  initialIndex?: number;
 }
 
-function ImgSlider({ images, name, children }: ItemProps) {
+function ImgSlider({
+  images,
+  name,
+  children,
+  onImageClick,
+  isModal,
+  initialIndex,
+}: ItemProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const totalSlides = (images ?? []).length;
   const lastSlide = totalSlides - 1;
@@ -35,8 +45,8 @@ function ImgSlider({ images, name, children }: ItemProps) {
     slidesToShow: 1,
     slidesToScroll: 1,
     arrows: true,
-    nextArrow: <CustomNextArrow />,
-    prevArrow: <CustomPrevArrow />,
+    nextArrow: <CustomNextArrow isModal={isModal} />,
+    prevArrow: <CustomPrevArrow isModal={isModal} />,
     beforeChange: (_: number, next: number) => setCurrentSlide(next),
     appendDots: () => {
       const totalDots = Math.min(images.length, 3);
@@ -61,13 +71,21 @@ function ImgSlider({ images, name, children }: ItemProps) {
   `;
 
   return (
-    <Wrapper>
+    <Wrapper $isModal={isModal}>
       <GlobalStyle />
       <Slider {...settings}>
         {(images ?? []).map((image, index) => (
-          <ImgContainer key={index}>
-            <Img src={image} alt={`${name} - 이미지 ${index + 1}`} />
-            <Overlay>{children}</Overlay> {/* ✅ 이미지 위에 덮임 */}
+          <ImgContainer
+            key={index}
+            $isModal={isModal}
+            onClick={() => onImageClick?.(index)}
+          >
+            <Img
+              src={image}
+              alt={`${name} - 이미지 ${index + 1}`}
+              $isModal={isModal}
+            />
+            <Overlay>{children}</Overlay>
           </ImgContainer>
         ))}
       </Slider>
@@ -77,42 +95,39 @@ function ImgSlider({ images, name, children }: ItemProps) {
 
 export default ImgSlider;
 
-// 👇 custom arrows 그대로 유지
 const CustomNextArrow = (props: any) => {
-  const { onClick } = props;
+  const { onClick, isModal } = props;
   return (
-    <ArrowRight onClick={onClick}>
+    <ArrowRight onClick={onClick} $isModal={isModal}>
       <img src={icRight} alt="next" />
     </ArrowRight>
   );
 };
 
 const CustomPrevArrow = (props: any) => {
-  const { onClick } = props;
+  const { onClick, isModal } = props;
   return (
-    <ArrowLeft onClick={onClick}>
+    <ArrowLeft onClick={onClick} $isModal={isModal}>
       <img src={icLeft} alt="prev" />
     </ArrowLeft>
   );
 };
 
-const Wrapper = styled.div`
-  width: 390.582px;
+const Wrapper = styled.div<{ $isModal?: boolean }>`
+  width: ${({ $isModal }) => ($isModal ? '800px' : '390.582px')};
+  max-width: 100%;
   position: relative;
-  ${media.medium`
-    width: 307px;
-  `};
 `;
 
-const ImgContainer = styled.div`
-  position: relative; /* ✅ 기준 부모 설정 */
-  width: 390.582px;
-  height: 390.582px;
+const ImgContainer = styled.div<{ $isModal?: boolean }>`
+  position: relative;
+  width: ${({ $isModal }) => ($isModal ? '800px' : '390.582px')};
+  height: ${({ $isModal }) => ($isModal ? '800px' : '390.582px')};
   display: flex;
 
   ${media.medium`
-    width: 307px;
-    height: 307px;
+    width: ${({ $isModal }) => ($isModal ? '90vw' : '390.582px')};
+    height: ${({ $isModal }) => ($isModal ? '90vw' : '390.582px')};
   `}
 `;
 
@@ -126,16 +141,12 @@ const Overlay = styled.div`
   pointer-events: none; // 클릭 막고 싶으면 유지
 `;
 
-const Img = styled.img`
-  width: 390.582px;
-  height: 390.582px;
+const Img = styled.img<{ $isModal?: boolean }>`
+  width: 100%;
+  height: 100%;
   border-radius: 5px;
   background: #f7f7f7;
   object-fit: contain;
-  ${media.medium`
-    width: 307px;
-    height: 307px;
-  `}
 `;
 
 const CustomDots = styled.ul`
@@ -157,9 +168,9 @@ const CustomDots = styled.ul`
   }
 `;
 
-const ArrowRight = styled.button`
+const ArrowRight = styled.button<{ $isModal?: boolean }>`
   position: absolute;
-  top: 185px;
+  top: ${({ $isModal }) => ($isModal ? '380px' : '185px')};
   right: 14px;
   z-index: 99;
   background: none;
@@ -167,9 +178,9 @@ const ArrowRight = styled.button`
   cursor: pointer;
 `;
 
-const ArrowLeft = styled.button`
+const ArrowLeft = styled.button<{ $isModal?: boolean }>`
   position: absolute;
-  top: 185px;
+  top: ${({ $isModal }) => ($isModal ? '380px' : '185px')};
   left: 14px;
   z-index: 99;
   background: none;

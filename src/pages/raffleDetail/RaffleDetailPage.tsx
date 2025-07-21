@@ -8,6 +8,8 @@ import { useParams, useLocation } from 'react-router-dom';
 import { TRaffleDetail, RaffleDetailProps } from '../../types/RaffleDetail';
 import useRaffleStore from '../../store/raffleStore';
 import { getClientId } from './utils/clientId';
+import media from '../../styles/media';
+import useScreenSize from '../../styles/useScreenSize';
 
 const RaffleDetailPage: React.FC = () => {
   const { type } = useParams<{ type?: string }>();
@@ -43,17 +45,14 @@ const RaffleDetailPage: React.FC = () => {
   });
   const isChecked = useRaffleStore((s) => s.isChecked);
   const [followingState, setFollowingState] = useState<boolean>(false);
+  const { isSmallScreen, isMediumScreen, isLargeScreen } = useScreenSize();
+
   useEffect(() => {
     console.log('래플 상세보기 useEffect');
     const fetchRaffleData = async () => {
       try {
         const { data }: { data: TRaffleDetail } = await axiosInstance.get(
           `/api/permit/raffles/${typeNumber}`,
-          // {
-          //   headers: {
-          //     'X-Client-Id': clientId,
-          //   },
-          // },
         );
 
         console.log('API Response:', data.result);
@@ -69,14 +68,27 @@ const RaffleDetailPage: React.FC = () => {
   return (
     <Wrapper>
       <Item {...raffleData} />
-      <MoreInfoLayout>
-        <Market
-          {...raffleData}
-          type={type}
-          setFollowingState={setFollowingState}
-        />
-        <Probability {...raffleData} />
-      </MoreInfoLayout>
+      {isLargeScreen && (
+        <MoreInfoLayout>
+          <Market
+            {...raffleData}
+            type={type}
+            setFollowingState={setFollowingState}
+          />
+          <Probability {...raffleData} />
+        </MoreInfoLayout>
+      )}
+
+      {isMediumScreen && (
+        <>
+          <Probability {...raffleData} />
+          <Market
+            {...raffleData}
+            type={type}
+            setFollowingState={setFollowingState}
+          />
+        </>
+      )}
     </Wrapper>
   );
 };
@@ -84,13 +96,14 @@ const RaffleDetailPage: React.FC = () => {
 export default RaffleDetailPage;
 
 const Wrapper = styled.div`
-  width: 1080px;
+  max-width: 1440px;
   padding-bottom: 200px;
   display: flex;
-  align-items: center;
+  align-items: safe center;
   flex-direction: column;
   padding-top: 63px;
-  margin: 0 auto;
+  ${media.medium`padding-bottom: 63px;
+      `}
 `;
 
 const MoreInfoLayout = styled.div`

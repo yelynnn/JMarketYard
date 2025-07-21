@@ -11,7 +11,7 @@ interface DeliveryState {
 
 const useDeliveryStore = create<DeliveryState>((set) => ({
   deliveryId: null,
-  deliveryStatus: 'WAITING_ADDRESS',
+  deliveryStatus: 'SHIPPED',
   setDeliveryId: (id) => set({ deliveryId: id }),
   setDeliveryStatus: (status) => set({ deliveryStatus: status }),
 }));

@@ -26,5 +26,7 @@ const Wrapper = styled.div`
 `;
 
 const MainContent = styled.main`
+  max-width: 1080px;
+  width: 100%;
   flex: 1;
 `;

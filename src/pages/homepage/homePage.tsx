@@ -16,8 +16,8 @@ import axiosInstance from '../../apis/axiosInstance';
 
 interface HomeData {
   approaching: RaffleProps[];
-  myLikeRaffles: RaffleProps[] | null; // ✅ 로그인 안 했을 경우 null 가능
-  myFollowRaffles: RaffleProps[] | null; // ✅ 로그인 안 했을 경우 null 가능
+  myLikeRaffles: RaffleProps[] | null;
+  myFollowRaffles: RaffleProps[] | null;
   raffles: RaffleProps[] | null;
 }
 
@@ -102,9 +102,12 @@ const HomePage: React.FC = () => {
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 1080px;
+  max-width: 1080px;
   margin: 0 auto;
   align-items: center;
+  ${media.medium`
+  width:630px;
+  `}
 `;
 
 const LookAroundContainer = styled.div`
@@ -169,9 +172,17 @@ const ProductGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   place-items: center;
-  gap: 44px;
+  gap: 56px;
   width: 100%;
-  max-width: 1080px;
+
+  ${media.medium`
+    grid-template-columns: repeat(3, 1fr);
+    gap:11px;
+  `}
+  ${media.small`
+    grid-template-columns: repeat(1, 1fr);
+    gap:0px;
+  `}
 `;
 
 export default HomePage;

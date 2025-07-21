@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from '../../../components/Modal/Modal';
 import styled from 'styled-components';
-import sadVector from '../../../../assets/sadVector.png';
+import sadVector from '../../../assets/sadVector.png';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 interface ModalProps {
@@ -11,7 +11,7 @@ interface ModalProps {
 const GiveUpOkModal: React.FC<ModalProps> = ({ onClose }) => {
   const navigate = useNavigate();
   return (
-    <Modal onClose={onClose}>
+    <Modal onClose={() => navigate('/')}>
       <Container>
         <Img src={sadVector} />
         <Title>당첨을 포기했습니다.</Title>

@@ -20,6 +20,21 @@ function AdBanner() {
     centerMode: true,
     centerPadding: '20%',
     cssEase: 'ease',
+    responsive: [
+      {
+        breakpoint: 744, // 744px 이하일 때 적용됨
+        settings: {
+          centerPadding: '0%',
+        },
+      },
+      {
+        breakpoint: 390,
+        settings: {
+          centerPadding: '0%',
+          dots: false,
+        },
+      },
+    ],
   };
 
   return (
@@ -40,7 +55,6 @@ function AdBanner() {
             <AdImage src={promotion2} alt="프로모션 2" />
           </AdBox>
         </div>
-
       </Slider>
     </Wrapper>
   );
@@ -80,7 +94,8 @@ const Wrapper = styled.div`
     }
   }
   ${media.medium`
-      margin-top: 26px;
+  width:100%;
+  margin: 39px 0 61px 0;
   `}
 `;
 
@@ -95,6 +110,10 @@ const AdBox = styled.div`
   justify-content: center;
   align-items: center;
   background-color: #e4e4e4;
+  ${media.medium`
+  width:100%;
+  border-radius: 0px;
+  `}
 `;
 
 const AdImage = styled.img`

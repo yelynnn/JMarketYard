@@ -15,6 +15,7 @@ import WaitModal from './modals/WaitModal';
 import { formatMinutesToHoursAndMinutes } from '../../utils/FormatMinuitesToHourAndMinutes';
 import { formatDate } from '../../utils/formatDate';
 import useHostResultStore from './store/hostResultStore';
+import media from '../../styles/media';
 
 const ResultPage: React.FC = () => {
   const { raffleData, deliveryData, setRaffleData, setDeliveryData } =
@@ -171,8 +172,7 @@ const ResultPage: React.FC = () => {
       <ButtonContainer>
         {raffleStatus == 'ENDED' && (
           <>
-            {(deliveryStatus === 'WAITING_ADDRESS' ||
-              deliveryStatus === 'ADDRESS_EXPIRED') && (
+            {deliveryStatus === 'WAITING_ADDRESS' && (
               <>
                 <GrayButtonBox>운송장 입력하기</GrayButtonBox>
                 <GrayButtonBox>
@@ -243,8 +243,8 @@ const ResultPage: React.FC = () => {
 export default ResultPage;
 
 const Wrapper = styled.div`
-  width: 1080px;
-  min-height: 1498px;
+  max-width: 1080px;
+  max-height: 1498px;
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -259,6 +259,8 @@ const ResultLayout = styled.div`
   justify-content: flex-start;
   align-items: center;
   margin: 105px auto 243px auto;
+  ${media.medium`
+  margin: 40px auto 222px auto;`}
 `;
 
 const ResultContainer = styled.div`
@@ -453,6 +455,8 @@ const ButtonContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 47px;
+
+  ${media.medium`gap:30px;`}
 `;
 
 const GrayButtonBox = styled.div`
@@ -487,7 +491,7 @@ const PurpleButtonBox = styled.button`
   color: #fff;
   text-align: center;
   font-family: Pretendard;
-  font-size: 20px;
+  font-size: 18px;
   font-style: normal;
   font-weight: 700;
   line-height: 18px; /* 90% */

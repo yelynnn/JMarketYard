@@ -9,6 +9,7 @@ import { useAuth } from '../../../context/AuthContext';
 import { useModalContext } from '../../../components/Modal/context/ModalContext';
 import { OpenLogInModal } from '../../../utils/OpenLogInModal';
 import FollowFailModal from './modals/FollowFailModal';
+import media from '../../../styles/media';
 
 interface MarketProps extends RaffleDetailProps {
   type?: string;
@@ -129,6 +130,10 @@ const Wrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  ${media.medium`
+    margin-top: 84px;
+  `}
 `;
 
 const BigTitleBox = styled.div`
@@ -144,6 +149,11 @@ const BigTitleBox = styled.div`
   font-style: normal;
   font-weight: 600;
   line-height: normal;
+
+  ${media.medium`
+      width: 675px;
+      margin: 0 14px 56px 14px;
+  `}
 `;
 
 const TitleIcon = styled.span`

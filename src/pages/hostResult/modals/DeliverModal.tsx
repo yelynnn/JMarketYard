@@ -178,6 +178,7 @@ const Input = styled.input<{ isError: boolean }>`
   justify-content: center;
   align-items: center;
   outline: none;
+  cursor: pointer;
   border: ${({ isError }) =>
     isError ? '1px solid #C908FF' : '1px solid #000'};
 `;

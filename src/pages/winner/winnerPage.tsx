@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import BigTitle from '../../components/BigTitle';
 import axiosInstance from '../../apis/axiosInstance';
 import { useNavigate, useLocation } from 'react-router-dom';
-import moreList from '../../assets/homePage/moreList.svg';
 import media from '../../styles/media';
 import { TAddress } from '../address/addressSetPage';
 import { TDeliveryStatus } from '../../types/deliveryStatus';
@@ -55,6 +54,7 @@ const WinnerPage: React.FC = () => {
   const [winnerData, setWinnerData] = useState<TWinner>();
   const [address, setAddress] = useState<TAddress>();
   const [raffleId, setRaffleId] = useState<number>(0);
+
   const queryParams = new URLSearchParams(location.search);
   const approvedAt = queryParams.get('approvedAt');
 
@@ -103,7 +103,6 @@ const WinnerPage: React.FC = () => {
         setAddress(data.result.address);
         setRaffleId(data.result.raffleId);
         console.log(data.result);
-        console.log(data.result.address);
       } catch (error) {
         console.error(error);
       }
@@ -351,48 +350,21 @@ const Wrapper = styled.div`
   padding-top: 63px;
 `;
 
-const MoreListBox = styled.a`
-  width: 220px;
-  height: 34px;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  margin-left: auto;
-  display: flex;
-
-  color: #8f8e94;
-  text-align: center;
-  font-family: Pretendard;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 36.832px; /* 230.199% */
-  text-decoration-line: underline;
-  text-decoration-style: solid;
-  text-decoration-skip-ink: auto;
-  text-decoration-thickness: auto;
-  text-underline-offset: auto;
-  text-underline-position: from-font;
-
-  img {
-    width: 10px;
-    height: 17px;
-    margin-left: 35px;
-  }
-
-  cursor: pointer;
-`;
 const AdressWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  margin-bottom: 118px;
+  margin: 46px 0 118px 0;
+  gap: 24px;
+  ${media.medium`width:596px;
+  align-items: center;`};
 `;
+
 const AddressLayout = styled.div`
   display: flex;
   width: 805px;
   align-items: center;
   gap: 40px;
-  margin: 46px 0 24px 0;
+  ${media.medium`width:100%;`}
 `;
 
 const AddressContainer = styled.div`
@@ -432,7 +404,7 @@ const AddressSpan = styled.span`
   text-overflow: ellipsis;
   width: 460px;
   ${media.medium`
-  width: 229px;
+  width: 300px;
 `}
 `;
 
@@ -560,6 +532,7 @@ const ButtonLayout = styled.div`
   align-items: center;
   min-width: 474px;
   gap: 47px;
+  ${media.medium`gap:30px;`}
 `;
 
 const PurpleButton = styled.button`
@@ -706,6 +679,7 @@ const InfoBox2 = styled.div`
 
 const ButtonLayout2 = styled.div`
   margin-top: 149px;
+  ${media.medium`margin-top:80px;`}
 `;
 
 const WarningContainer = styled.div`
@@ -715,6 +689,9 @@ const WarningContainer = styled.div`
   align-items: center;
   gap: 15px;
   margin: 17px 0 29px 0;
+
+  ${media.medium`
+  margin: 11px 0 29px 0;`}
 `;
 
 const WarningBox = styled.div`
@@ -804,20 +781,13 @@ const Kakao = styled.div`
   font-style: normal;
   font-weight: 600;
   line-height: normal;
-  ${media.notLarge`
-      font-size: 15px;
-    `}
 `;
 
 const ResponsiveIcon = styled(Icon)`
   width: 24px;
   height: 20px;
   color: black;
-
-  ${media.notLarge`
-    width: 19px; 
-    height: 15px;
-  `}
+  display: inline;
 `;
 
 const AgreeBox = styled.div`

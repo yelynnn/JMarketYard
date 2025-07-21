@@ -6,6 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import RaffleProps from '../../../types/RaffleProps';
+import media from '../../../styles/media';
+import useScreenSize from '../../../styles/useScreenSize';
 
 interface HomeSectionProps {
   title: string;
@@ -23,7 +25,14 @@ const HomeSection: React.FC<HomeSectionProps> = ({
   products,
 }) => {
   const navigate = useNavigate();
+  const { isSmallScreen, isMediumScreen, isLargeScreen } = useScreenSize();
 
+  let displayedProducts = products;
+  if (isSmallScreen) {
+    displayedProducts = products.slice(0, 2);
+  } else if (isMediumScreen) {
+    displayedProducts = products.slice(0, 3);
+  }
   return (
     <Wrapper>
       <HeaderContainer>
@@ -39,7 +48,7 @@ const HomeSection: React.FC<HomeSectionProps> = ({
       </HeaderContainer>
 
       <ProductContainer>
-        {products.map((products) => (
+        {displayedProducts.map((products) => (
           <SmallProductCard key={products.raffleId} {...products} />
         ))}
       </ProductContainer>
@@ -94,7 +103,14 @@ const ProductContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   place-items: center;
-  gap: 30px;
-  width: 100%;
   max-width: 1080px;
+  gap: 30px;
+  ${media.medium`
+      grid-template-columns: repeat(3, 1fr);
+      gap: 9px;
+    `}
+  ${media.small`
+      grid-template-columns: repeat(2, 1fr);
+      gap: 3px;
+    `};
 `;

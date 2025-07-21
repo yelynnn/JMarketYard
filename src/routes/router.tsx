@@ -111,7 +111,25 @@ const router = createBrowserRouter([
       {
         path: 'review',
         element: <WriteReview />,
+
       },
+      {
+        path: 'mypage/my-review',
+        element: <MyReview />,
+      },
+      {
+        path: 'mypage/payment',
+        element: <Payment />,
+      },
+      {
+        path: 'user/:userId',
+        element: <UserProfilePage />,
+      },
+      {
+        path: 'winner-page',
+        element: <WinnerPage />,
+      },
+
       {
         path: '',
         element: (

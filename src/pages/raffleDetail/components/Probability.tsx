@@ -5,13 +5,18 @@ import DonutText from './DonutText';
 import { RaffleDetailProps } from '../../../types/RaffleDetail';
 import useRaffleStore from '../../../store/raffleStore';
 import React, { useEffect, useState } from 'react';
+import BigTitle from '../../../components/BigTitle';
+import media from '../../../styles/media';
+import useScreenSize from '../../../styles/useScreenSize';
 
 const Probability: React.FC<RaffleDetailProps> = (raffle) => {
   const { isApplying, isChecked } = useRaffleStore();
+  const { isSmallScreen, isMediumScreen, isLargeScreen } = useScreenSize();
   useEffect(() => {}, [isApplying, isChecked]);
 
   return (
     <Wrapper>
+      {!isLargeScreen && <BigTitle>래플 현황</BigTitle>}
       {raffle.raffleStatus === 'UNOPENED' && (
         <>
           <SmallContainer>
@@ -195,6 +200,10 @@ const SmallContainer = styled.div`
   font-style: normal;
   font-weight: 500;
   line-height: 150%; /* 27px */
+
+  ${media.medium`
+    margin-top: 80px;
+  `}
 `;
 
 const PinkText = styled.p`
@@ -229,13 +238,16 @@ const UnOpenBox = styled.div`
   line-height: 150%; /* 27px */
 `;
 
-// 중앙 정렬을 위한 컨테이너
 const CenteredContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   width: 100%;
+
+  ${media.medium`
+    margin-top: 80px;
+  `}
 `;
 
 const TitleBox = styled.div`
@@ -290,6 +302,10 @@ const FailedContainer = styled.div`
   font-style: normal;
   font-weight: 500;
   line-height: 150%; /* 27px */
+
+  ${media.medium`
+    margin-top: 80px;
+  `}
 `;
 
 const FailedBox = styled.div`
@@ -302,5 +318,5 @@ const FailedBox = styled.div`
   font-size: 16px;
   font-style: normal;
   font-weight: 500;
-  line-height: 150%; /* 24px */
+  line-height: 150%;
 `;

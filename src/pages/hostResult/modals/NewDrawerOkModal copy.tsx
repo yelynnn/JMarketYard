@@ -20,7 +20,7 @@ const NewDrawerOkModal: React.FC<ModalProps> = ({ onClose, raffleId }) => {
         <Img src={smileVector} />
         <Title>새로운 당첨자 추첨 완료!</Title>
         <Button onClick={() => navigate(`/raffles/${raffleId}`)}>
-          내 래플로 이동하기
+          래플 상세보기로 이동하기
         </Button>
       </Container>
     </Modal>

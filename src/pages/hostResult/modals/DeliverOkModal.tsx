@@ -11,7 +11,7 @@ interface ModalProps {
 const DeliverOkModal: React.FC<ModalProps> = ({ onClose }) => {
   const navigate = useNavigate();
   return (
-    <Modal onClose={onClose}>
+    <Modal onClose={() => navigate('/')}>
       <Container>
         <Img src={smileVector} />
         <Title>운송장 입력이 완료되었습니다</Title>

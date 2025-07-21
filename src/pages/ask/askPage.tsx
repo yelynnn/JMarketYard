@@ -83,7 +83,11 @@ const AskPage = () => {
     <Container>
       <BigTitle>문의 게시판</BigTitle>
       <TopLayout>
-        <ImgSlider images={sRaffle.imageUrls} name={sRaffle.name}>
+        <ImgSlider
+          images={sRaffle.imageUrls}
+          name={sRaffle.name}
+          onImageClick={handleImageClick}
+        >
           {(sRaffle.raffleStatus === 'UNFULFILLED' ||
             sRaffle.raffleStatus === 'ENDED' ||
             sRaffle.raffleStatus === 'CANCELLED' ||

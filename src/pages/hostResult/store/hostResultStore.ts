@@ -60,7 +60,7 @@ const useHostResultStore = create<HostResultState>((set) => ({
     minTicket: 0,
     applyTicket: 0,
     totalAmount: 0,
-    deliveryStatus: 'WAITING_ADDRESS',
+    deliveryStatus: 'ADDRESS_EXPIRED',
     shippingDeadline: null,
     address: defaultAddress,
   },
