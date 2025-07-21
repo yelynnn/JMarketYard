@@ -27,21 +27,6 @@ const WriteAsk = ({ type }: { type: string | undefined }) => {
   };
 
   const handleAsk = () => {
-    // const postAsk = async () => {
-    //   await axiosInstance
-    //     .post('/api/member/inquiry', {
-    //       raffleId: Number(type),
-    //       title,
-    //       content,
-    //     })
-    //     .then((_) => {
-    //       setTitle('');
-    //       setContent('');
-    //       console.log('postAsk OK');
-    //       alert('문의글이 등록되었습니다!');
-    //     })
-    //     .then((_) => location.reload());
-    // };
     if (title === '') alert('제목을 입력해주세요');
     else if (content === '') alert('내용을 입력해주세요');
     else handleAskModal();
@@ -93,6 +78,9 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   row-gap: 44px;
+  ${media.small`
+    row-gap: 25px;
+  `}
 `;
 
 const TitleContainer = styled.div`
@@ -133,6 +121,9 @@ const TitleBox = styled.div`
 
   ${media.medium`
     width: 467px;
+  `}
+  ${media.small`
+    width: 288px;
   `}
 `;
 const Input = styled.input`
@@ -176,6 +167,9 @@ const Textarea = styled.textarea`
   ${media.medium`
     width: 467px;
   `}
+  ${media.small`
+    width: 288px;
+  `}
 `;
 const WordCountDiv = styled.div`
   width: 100%;
@@ -212,4 +206,8 @@ const Button = styled.button`
   &:hover {
     cursor: pointer;
   }
+
+  ${media.small`
+    width: 342px;
+  `}
 `;

@@ -52,10 +52,10 @@ const router = createBrowserRouter([
             path: 'raffle-upload',
             element: <RaffleUploadPage />,
           },
-          {
-            path: 'review',
-            element: <WriteReview />,
-          },
+          // {
+          //   path: 'review',
+          //   element: <WriteReview />,
+          // },
           {
             path: 'mypage/address',
             element: (
@@ -106,7 +106,11 @@ const router = createBrowserRouter([
             path: 'winner-page',
             element: <WinnerPage />,
           },
-        ]
+        ],
+      },
+      {
+        path: 'review',
+        element: <WriteReview />,
       },
       {
         path: '',

@@ -260,6 +260,7 @@ const RaffleUploadPage = () => {
                   key={item.key}
                   onClick={() => handleItemState(item.key)}
                   $clicked={String(item.key === itemState)}
+                  $isState={true}
                 >
                   {item.text}
                 </ConditionBtn>
@@ -277,29 +278,33 @@ const RaffleUploadPage = () => {
         <SetConditionContainer>
           <SetConditionBox>
             <TitleSpan2>응모 티켓 개수</TitleSpan2>
-            {tickets.map((t) => (
-              <ConditionBtn
-                type="button"
-                key={t}
-                onClick={() => handleTicketNum(t)}
-                $clicked={String(t === ticketNum)}
-              >
-                {t}
-              </ConditionBtn>
-            ))}
+            <div>
+              {tickets.map((t) => (
+                <ConditionBtn
+                  type="button"
+                  key={t}
+                  onClick={() => handleTicketNum(t)}
+                  $clicked={String(t === ticketNum)}
+                >
+                  {t}
+                </ConditionBtn>
+              ))}
+            </div>
           </SetConditionBox>
           <SetConditionBox>
             <TitleSpan2>장마당 케어</TitleSpan2>
-            {care.map((v) => (
-              <ConditionBtn
-                type="button"
-                key={v.key}
-                onClick={() => handleJcare(v.key)}
-                $clicked={String(v.key === jcare)}
-              >
-                {v.text}
-              </ConditionBtn>
-            ))}
+            <div>
+              {care.map((v) => (
+                <ConditionBtn
+                  type="button"
+                  key={v.key}
+                  onClick={() => handleJcare(v.key)}
+                  $clicked={String(v.key === jcare)}
+                >
+                  {v.text}
+                </ConditionBtn>
+              ))}
+            </div>
           </SetConditionBox>
           <SetConditionBox>
             <TitleSpan2>최소 마감 티켓 개수</TitleSpan2>
@@ -385,9 +390,12 @@ const ItemInfoContainer = styled.div`
   display: flex;
   column-gap: 73px;
   ${media.medium`
-        flex-direction: column;
-        align-items: center;
-    `}
+      flex-direction: column;
+      align-items: center;
+  `}
+  ${media.small`
+    padding: 0 24px;
+  `}
 `;
 
 const ImgContainer = styled.div`
@@ -421,6 +429,10 @@ const ImgFileLabel = styled.label`
   &:hover {
     cursor: pointer;
   }
+  ${media.small`
+    width: 217px;
+    height: 217px;
+  `}
 `;
 // const SelectedImg = styled.img`
 //   display: inline-block;
@@ -452,6 +464,9 @@ const TitleSpan = styled.div`
   font-style: normal;
   font-weight: 500;
   line-height: 36.832px; /* 184.159% */
+  ${media.small`
+    min-width: 81px;
+  `}
 `;
 const TitleSpan2 = styled.div`
   min-width: 221px;
@@ -481,6 +496,9 @@ const StyleP = styled.p`
   &:hover {
     cursor: default;
   }
+  ${media.small`
+    display: none;
+  `}
 `;
 
 const ItemCategorySelect = styled.select`
@@ -505,11 +523,14 @@ const ItemCategorySelect = styled.select`
   }
 
   ${media.medium`
-        width: 530px;
-    `}
+    width: 530px;
+  `}
+  ${media.small`
+    width: 260px;
+  `}
 `;
 
-const ConditionBtn = styled.button<{ $clicked: string }>`
+const ConditionBtn = styled.button<{ $clicked: string; $isState?: boolean }>`
   padding: 0 14px;
   height: 37px;
   border-radius: 11px;
@@ -535,6 +556,12 @@ const ConditionBtn = styled.button<{ $clicked: string }>`
         background: transparent;
         color: #000;
         `};
+  ${(props) =>
+    props.$isState &&
+    media.small`
+    min-widht: 34px;
+    padding: 0;
+  `}
 `;
 
 const Textarea = styled.textarea`
@@ -553,6 +580,9 @@ const Textarea = styled.textarea`
   ${media.medium`
         width: 530px;
     `}
+  ${media.small`
+    width: 260px;
+  `}
 `;
 
 const TextareaDiv = styled.div`
@@ -569,6 +599,11 @@ const SetConditionContainer = styled.div`
   row-gap: 23px;
   align-items: center;
   padding-top: 60px;
+  ${media.small`
+    padding-top: 45px;
+    row-gap: 27px;
+    padding-right: 13px;
+  `}
 `;
 
 const SetConditionBox = styled.div`
@@ -579,6 +614,11 @@ const SetConditionBox = styled.div`
         width: 100%;
         padding-left: 13px;
     `}
+  ${media.small`
+    flex-direction: column;
+    gap: 17px;
+    justify-content: space-between;
+  `}
 `;
 
 const InputContainer = styled.div<{ width?: number }>`
@@ -596,6 +636,8 @@ const InputContainer = styled.div<{ width?: number }>`
         width: ${(props: { width?: number }) =>
           props.width ? '530px' : `464px`};
     `}
+  ${(props) =>
+    props.width ? media.small`width: 260px;` : media.small`width: 342px;`}
 `;
 const InputBox = styled.input`
   flex: 1;
@@ -609,34 +651,37 @@ const InputBox = styled.input`
   letter-spacing: -0.165px;
 `;
 
-// const DatePickerBox = styled.div`
-//   .react-datepicker__input-container {
-//     width: 636px;
-//     height: 45px;
-//     border-radius: 7px;
-//     border: 1px solid #8f8e94;
-//     box-sizing: border-box;
-//     padding: 0 10px;
-//     display: flex;
+const DatePickerBox = styled.div`
+  .react-datepicker__input-container {
+    width: 636px;
+    height: 45px;
+    border-radius: 7px;
+    border: 1px solid #8f8e94;
+    box-sizing: border-box;
+    padding: 0 10px;
+    display: flex;
 
-//     ${media.medium`
-//             width: 464px;
-//         `}
-//   }
+    ${media.medium`
+            width: 464px;
+        `}
+    ${media.small`
+      width: 342px;
+    `}
+  }
 
-//   input {
-//     width: 100%;
-//     font-size: 18px;
-//     font-family: Pretendard;
-//     font-style: normal;
-//     line-height: 18px;
-//     letter-spacing: -0.165px;
-//     border: none;
-//     outline: none;
-//     readonly: true;
-//     caret-color: transparent;
-//   }
-// `;
+  input {
+    width: 100%;
+    font-size: 18px;
+    font-family: Pretendard;
+    font-style: normal;
+    line-height: 18px;
+    letter-spacing: -0.165px;
+    border: none;
+    outline: none;
+    readonly: true;
+    caret-color: transparent;
+  }
+`;
 
 const SubmitBtn = styled.input`
   width: 424px;
@@ -657,4 +702,7 @@ const SubmitBtn = styled.input`
   &:hover {
     cursor: pointer;
   }
+  ${media.small`
+    width: 342px;
+  `}
 `;

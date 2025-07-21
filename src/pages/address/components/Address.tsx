@@ -34,19 +34,18 @@ const Address = ({
 
   const handleCheckbox = () => {
     addressId.includes(address.addressId)
-    ? setAddressId(prev => prev.filter(v=>v!=address.addressId))
-    : setAddressId(prev => [...prev, address.addressId]);
+      ? setAddressId((prev) => prev.filter((v) => v != address.addressId))
+      : setAddressId((prev) => [...prev, address.addressId]);
   };
   return (
     <>
       <List>
         {isSelect ? (
           <Checkbox
-            width={window.innerWidth>744?27:21}
-            height={window.innerWidth>744?27:21}
+            width={window.innerWidth > 744 ? 27 : 21}
+            height={window.innerWidth > 744 ? 27 : 21}
             onClick={handleCheckbox}
-            fill={addressId.includes(address.addressId)
-              ? '#C908FF' : 'none'}
+            fill={addressId.includes(address.addressId) ? '#C908FF' : 'none'}
           />
         ) : (
           <ListIcon />
@@ -54,9 +53,7 @@ const Address = ({
         <Title>{address.addressName}</Title>
         <AddressText>{address.addressDetail}</AddressText>
         <SetBtn $default={address.isDefault} onClick={defaultAddress}>
-          {address.isDefault
-            ? '기본 배송지로 설정됨'
-            : '기본 배송지로 설정하기'}
+          {address.isDefault ? '기본 배송지로 설정됨' : '기본 배송지로 설정'}
         </SetBtn>
       </List>
     </>
@@ -76,6 +73,11 @@ const List = styled.li`
     width: 631px;
     column-gap: 49px;
     // justify-content: space-between;
+  `}
+  ${media.small`
+    width: 342px;
+    column-gap: auto;
+    justify-content: space-between;
   `}
 `;
 
@@ -97,7 +99,7 @@ const ListIcon = styled.span`
   display: inline-block;
   width: 14px;
   height: 14px;
-  margin: 6.5px;
+  // margin: 6.5px;
   background-color: rgba(201, 8, 255, 0.2);
   border-radius: 100%;
   // margin-right: 78px;
@@ -134,6 +136,9 @@ const AddressText = styled.span`
   ${media.medium`
     width: 229px;
   `}
+  ${media.small`
+    display: none;
+  `}
 `;
 
 const SetBtn = styled.button<{ $default: boolean }>`
@@ -159,7 +164,9 @@ const SetBtn = styled.button<{ $default: boolean }>`
   ${(props) =>
     props.$default
       ? `background: rgba(201, 8, 255, 0.20);
-      color: #C908FF;`
+      color: #C908FF;
+      min-width: 161px;`
       : `background: #C908FF;
-      color: #FFF;`}
+      color: #FFF;
+      min-width: 147px;`}
 `;

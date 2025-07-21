@@ -91,34 +91,37 @@ const AskPage = () => {
             <RaffleClosingBox>응모 마감</RaffleClosingBox>
           )}
         </ImgSlider>
-        <DetailLayout>
-          <ItemTitleBox>{sRaffle.name}</ItemTitleBox>
-          <ViewBox>
-            조회 {sRaffle.view} · 찜 {sRaffle.likeCount}
-          </ViewBox>
-          <TicketBox>
-            <img src={icTicket} alt="ticket" width={34.61} height={22.023} />
-            {sRaffle.ticketNum}
-          </TicketBox>
-          <DetailContainer>
-            <TitleBox>카테고리</TitleBox>
-            <DescriptionBox>{sRaffle.category}</DescriptionBox>
-          </DetailContainer>
-          <DetailContainer>
-            <TitleBox>응모오픈</TitleBox>
-            <DescriptionBox>{formatDate(sRaffle.startAt)}</DescriptionBox>
-          </DetailContainer>
-          <DetailContainer className="last">
-            <TitleBox>응모마감</TitleBox>
-            <DescriptionBox>{formatDate(sRaffle.endAt)}</DescriptionBox>
-            {(sRaffle.raffleStatus === 'UNFULFILLED' ||
-              sRaffle.raffleStatus === 'ENDED' ||
-              sRaffle.raffleStatus === 'CANCELLED' ||
-              sRaffle.raffleStatus === 'COMPLETED') && (
-              <TextBox>응모마감</TextBox>
-            )}
-          </DetailContainer>
-        </DetailLayout>
+        {media.small && <ItemTitleBox>{sRaffle.name}</ItemTitleBox>}
+        {!media.small && (
+          <DetailLayout>
+            <ItemTitleBox>{sRaffle.name}</ItemTitleBox>
+            <ViewBox>
+              조회 {sRaffle.view} · 찜 {sRaffle.likeCount}
+            </ViewBox>
+            <TicketBox>
+              <img src={icTicket} alt="ticket" width={34.61} height={22.023} />
+              {sRaffle.ticketNum}
+            </TicketBox>
+            <DetailContainer>
+              <TitleBox>카테고리</TitleBox>
+              <DescriptionBox>{sRaffle.category}</DescriptionBox>
+            </DetailContainer>
+            <DetailContainer>
+              <TitleBox>응모오픈</TitleBox>
+              <DescriptionBox>{formatDate(sRaffle.startAt)}</DescriptionBox>
+            </DetailContainer>
+            <DetailContainer className="last">
+              <TitleBox>응모마감</TitleBox>
+              <DescriptionBox>{formatDate(sRaffle.endAt)}</DescriptionBox>
+              {(sRaffle.raffleStatus === 'UNFULFILLED' ||
+                sRaffle.raffleStatus === 'ENDED' ||
+                sRaffle.raffleStatus === 'CANCELLED' ||
+                sRaffle.raffleStatus === 'COMPLETED') && (
+                <TextBox>응모마감</TextBox>
+              )}
+            </DetailContainer>
+          </DetailLayout>
+        )}
       </TopLayout>
       <AskLayout>
         <MenuTab>
@@ -159,6 +162,9 @@ const Container = styled.div`
   flex-direction: column;
   align-items: safe center;
   margin-top: 64px;
+  ${media.small`
+    margin-top: 45px;
+  `}
 `;
 
 const TopLayout = styled.div`
@@ -173,6 +179,11 @@ const TopLayout = styled.div`
 
   ${media.medium`
     gap: 25px;
+  `}
+  ${media.small`
+    flex-direction: column;
+    align-items: center;
+    padding-top: 25px;
   `}
 `;
 
@@ -225,6 +236,11 @@ const ItemTitleBox = styled.p`
   line-height: 150%; /* 33px */
   ${media.medium`
     margin: 8px 0 15px;
+  `}
+  ${media.small`
+    width: 100%;
+    text-align: center;
+    font-size: 20px;
   `}
 `;
 const ViewBox = styled.div`
@@ -333,14 +349,21 @@ const AskLayout = styled.div`
     heigt: 47px;
     margin-top: 80px;
   `}
+
+  ${media.small`
+    width: 342px;
+    margin-top: 45px;
+  `}
 `;
 
 const MenuTab = styled.div`
   display: flex;
   margin-bottom: 40px;
+  ${media.small`
+    margin-bottom: 25px;
+  `}
 `;
 const Menu = styled.div<{ $myMenu: string; $menu: string }>`
-  // width: 306px;
   flex: 1;
   text-align: center;
   padding-bottom: 25px;
