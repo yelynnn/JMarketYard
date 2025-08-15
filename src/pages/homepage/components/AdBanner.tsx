@@ -15,22 +15,23 @@ function AdBanner() {
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
-    speed: 1500,
-    autoplaySpeed: 4000,
-    centerMode: true,
-    centerPadding: '20%',
-    cssEase: 'ease',
+    speed: 800,
+    autoplaySpeed: 2000,
+    centerMode: false,
+    cssEase: 'ease-in-out',
+    fade: false,
+    arrows: true,
     responsive: [
       {
-        breakpoint: 744, // 744px 이하일 때 적용됨
+        breakpoint: 744,
         settings: {
-          centerPadding: '0%',
+          arrows: false,
         },
       },
       {
         breakpoint: 390,
         settings: {
-          centerPadding: '0%',
+          arrows: false,
           dots: false,
         },
       },
@@ -42,17 +43,17 @@ function AdBanner() {
       <Slider {...settings}>
         <div>
           <AdBox>
-            <AdImage src={promotion3} alt="프로모션 3" />
-          </AdBox>
-        </div>
-        <div>
-          <AdBox>
             <AdImage src={promotion1} alt="프로모션 1" />
           </AdBox>
         </div>
         <div>
           <AdBox>
             <AdImage src={promotion2} alt="프로모션 2" />
+          </AdBox>
+        </div>
+        <div>
+          <AdBox>
+            <AdImage src={promotion3} alt="프로모션 3" />
           </AdBox>
         </div>
       </Slider>
@@ -63,56 +64,128 @@ function AdBanner() {
 export default AdBanner;
 
 const Wrapper = styled.div`
-  width: 1440px;
-  height: 396px;
+  width: 100%;
+  max-width: 1000px;
+  height: 400px;
   margin: 39px auto 61px auto;
-  box-sizing: content-box;
-  overflow: hidden;
+  box-sizing: border-box;
   background-color: white;
+  position: relative;
+
+  .slick-slider {
+    width: 100%;
+    height: 100%;
+  }
+
+  .slick-list {
+    width: 100%;
+    height: 100%;
+  }
+
+  .slick-track {
+    display: flex;
+    align-items: center;
+  }
 
   .slick-slide {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    height: 400px;
+  }
+
+  .slick-slide > div {
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 100%;
   }
 
   .slick-dots {
-    bottom: -27px;
+    bottom: -30px;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 8px;
+    gap: 8px;
+
+    li {
+      margin: 0 4px;
+    }
 
     .slick-active button::before {
-      color: #c908ff; /* 선택된 점의 색상 */
-      font-size: 8px;
+      color: #c908ff;
+      font-size: 12px;
+      opacity: 1;
     }
 
     button::before {
-      color: rgba(201, 8, 255, 0.2); /* 선택되지 않은 점의 색상 */
-      font-size: 8px;
+      color: rgba(201, 8, 255, 0.3);
+      font-size: 12px;
+      opacity: 1;
     }
   }
+
+  .slick-prev,
+  .slick-next {
+    width: 40px;
+    height: 40px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    z-index: 10;
+    
+    &:hover {
+      background-color: rgba(255, 255, 255, 1);
+    }
+    
+    &:before {
+      color: #c908ff;
+      font-size: 20px;
+    }
+  }
+
+  .slick-prev {
+    left: -60px;
+  }
+
+  .slick-next {
+    right: -60px;
+  }
+
   ${media.medium`
-  width:100%;
-  margin: 39px 0 61px 0;
+    max-width: 100%;
+    margin: 39px 0 61px 0;
+    
+    .slick-prev,
+    .slick-next {
+      display: none !important;
+    }
   `}
 `;
 
 const AdBox = styled.div`
-  width: 825px;
+  width: 950px;
   height: 369px;
   flex-shrink: 0;
-  margin: 0 23px;
+  margin: 0 auto;
   border-radius: 31px;
   overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #e4e4e4;
+  background-color: #f8f8f8;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
+  }
+
   ${media.medium`
-  width:100%;
-  border-radius: 0px;
+    width: 90%;
+    height: 300px;
+    border-radius: 15px;
+    margin: 0 auto;
   `}
 `;
 
@@ -120,4 +193,9 @@ const AdImage = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 31px;
+  
+  ${media.medium`
+    border-radius: 15px;
+  `}
 `;
