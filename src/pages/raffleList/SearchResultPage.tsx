@@ -1,55 +1,54 @@
-import { useState, useEffect, useRef } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useEffect, useRef } from 'react';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import ProductCard from '../../components/ProductCard';
 import RaffleProps from '../../types/RaffleProps';
 import axiosInstance from '../../apis/axiosInstance';
 import { useAuth } from '../../context/AuthContext';
-import { useIsSearchCompleted } from '../../store/store';
 import media from '../../styles/media';
+import {
+  useInfiniteQuery,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 
 const SearchResultPage: React.FC = () => {
   const { type } = useParams<{ type?: string }>();
   const observerRef = useRef<HTMLDivElement>(null);
-  const [allRaffles, setAllRaffles] = useState<RaffleProps[]>([]);
-  const [raffles, setRaffles] = useState<RaffleProps[]>([]);
-  const [page, setPage] = useState<number>(0);
-  const [hasMore, setHasMore] = useState(true);
-  const [isLoading, setIsLoading] = useState(true);
   const { isAuthenticated } = useAuth();
-  const isSearchCompleted = useIsSearchCompleted((v) => v.isSearchCompleted);
-  const setIsCompleted = useIsSearchCompleted((v) => v.setIsSearchCompleted);
+  const queryClient = useQueryClient();
 
-  // 모든 래플 데이터 받아오는 데이터: GET 호출은 각 검색 당 1번씩만
-  const fetchProducts = async () => {
-    const apiurl = isAuthenticated
-      ? 'api/member/search/raffles'
-      : 'api/permit/search/raffles';
-    const { data } = await axiosInstance.get(apiurl, {
-      params: { keyword: type },
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
+    useInfiniteQuery({
+      queryKey: ['searchRaffles', type, isAuthenticated],
+      queryFn: async ({ pageParam = 1 }) => {
+        const apiUrl = isAuthenticated
+          ? 'api/member/search/raffles'
+          : 'api/permit/search/raffles';
+        const { data } = await axiosInstance.get(apiUrl, {
+          params: { keyword: type, page: pageParam, size: 16 },
+        });
+
+        return {
+          raffles: data.result.searchedRaffles,
+          nextPage: data.result.pageInfo.hasNext ? pageParam + 1 : undefined,
+        };
+      },
+      getNextPageParam: (lastPage) => lastPage.nextPage,
+      enabled: !!type,
+      staleTime: 5 * 60 * 1000,
+      initialPageParam: 1,
     });
-    setAllRaffles(data.result.searchedRaffles);
-    setIsCompleted(!isSearchCompleted); // Zustand 상태 업데이트
-    setIsLoading(false);
-    // console.log("fetchProducts 결과:", data.result.searchedRaffles);
-  };
 
-  console.log('allRaffles:', allRaffles);
+  console.log('useInfiniteQuery data:', data);
+  const raffles = data?.pages.flatMap((page) => page.raffles) ?? [];
 
-  // 화면 최하단 ref에 스크롤이 도달하면 16개씩 데이터를 보여준다
-  const showProducts = () => {
-    if (isLoading) return;
-    console.log('showProducts 실행');
-    console.log(allRaffles);
-    const newRaffles = allRaffles.slice(page, page + 16);
-    setRaffles((prev) => [...prev, ...newRaffles]);
-    allRaffles.length > page + 16 ? setPage(page + 16) : setHasMore(false);
-  };
   useEffect(() => {
-    console.log('raffles 변경 감지', raffles);
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && hasMore) showProducts();
+        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
+        }
       },
       {
         root: null,
@@ -65,22 +64,13 @@ const SearchResultPage: React.FC = () => {
     return () => {
       if (observerRef.current) observer.unobserve(observerRef.current);
     };
-  }, [raffles, allRaffles]);
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   useEffect(() => {
-    setAllRaffles([]);
-    setRaffles([]);
-    setPage(0);
-    setHasMore(true);
-    fetchProducts();
-  }, [type]);
-  useEffect(() => {
-    showProducts();
-  }, [allRaffles]);
-
-  // useEffect(() => {
-  //   console.log("setAllRaffles 결과: ", allRaffles)
-  // }, [allRaffles]);
+    if (type && !isLoading) {
+      queryClient.invalidateQueries({ queryKey: ['recentSearches'] });
+    }
+  }, [type, isLoading]);
 
   return (
     <Wrapper>

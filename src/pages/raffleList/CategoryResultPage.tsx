@@ -50,22 +50,17 @@ const SearchResultPage: React.FC = () => {
     setIsLoading(true);
     try {
       const { data } = await axiosInstance.get('/api/permit/home/categories', {
-        params: { categoryName: categoryName },
+        params: { categoryName, page, size: 16 },
       });
+      console.log(data);
 
-      const startIndex = (page - 1) * 16;
-      const endIndex = startIndex + 16;
-      const newRaffles = data.result.raffles.slice(startIndex, endIndex);
+      const newRaffles = data.result.raffles;
+      setRaffles((prev) => [...prev, ...newRaffles]);
 
-      console.log('카테고리 :', categoryName);
-
-      if (newRaffles.length < 16) {
-        setRaffles((prev) => [...prev, ...newRaffles]);
+      if (!data.result.pageInfo.hasNext) {
         setHasMore(false);
-      } else {
-        setRaffles((prev) => [...prev, ...newRaffles]);
+        setPage(0);
       }
-      setPage((prev) => prev + 1);
     } catch (error) {
       console.error('데이터 불러오기 실패:', error);
     } finally {
@@ -77,7 +72,6 @@ const SearchResultPage: React.FC = () => {
     setRaffles([]);
     setPage(1);
     setHasMore(true);
-    fetchMoreProducts();
   }, [type]);
 
   useEffect(() => {

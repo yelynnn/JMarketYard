@@ -22,8 +22,15 @@ import icDel from '../assets/icDel.svg';
 import axiosInstance from '../apis/axiosInstance';
 import { TSearch } from '../types/searchKeywords';
 import { useAuth } from '../context/AuthContext';
-import { useIsSearchCompleted } from '../store/store';
 import { SyncOutlined, WysiwygOutlined } from '@mui/icons-material';
+import {
+  QueryCache,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
+
+export const RECENT_SEARCHES = 'recentSearches';
 
 const ResponsiveHeader = () => {
   const navigate = useNavigate();
@@ -34,23 +41,35 @@ const ResponsiveHeader = () => {
   const searchRef = useRef<HTMLDivElement>(null);
   const [searchText, setSearchText] = useState<string>('');
   const categoryRef = useRef<HTMLDivElement>(null);
-  const [hotKeywords, setHotKeywords] = useState<string[]>([]);
-  const [recentKeywords, setRecentKeywords] = useState<string[]>([]);
   const { isAuthenticated, logout } = useAuth();
-  const isSearchCompleted = useIsSearchCompleted((v) => v.isSearchCompleted);
-  const [searchClicked, setSearchClicked] = useState<boolean>(false);
+  const queryClient = useQueryClient();
 
-  const getSearch = async () => {
-    const { data }: { data: TSearch } = await axiosInstance.get(
-      isAuthenticated ? '/api/member/search' : '/api/permit/search',
-    );
+  const { data: searchData } = useQuery({
+    queryKey: [RECENT_SEARCHES, isAuthenticated],
+    queryFn: async () => {
+      const { data }: { data: TSearch } = await axiosInstance.get(
+        isAuthenticated ? '/api/member/search' : '/api/permit/search',
+      );
+      console.log('useQuery내부:', data);
+      return data.result;
+    },
+    staleTime: 0,
+    refetchOnMount: true,
+  });
+  const hotKeywords = searchData?.popularSearch ?? [];
+  const recentKeywords = searchData?.recentSearch ?? [];
 
-    console.log('recentSearch:', data.result.recentSearch);
-    setHotKeywords(data.result.popularSearch);
-    setRecentKeywords(data.result.recentSearch);
-  };
-  const delSearch = async (keyword: string) =>
-    await axiosInstance.delete(`/api/member/search?keyword=${keyword}`);
+  const deleteSearchMutation = useMutation({
+    mutationFn: async (keyword: string) => {
+      await axiosInstance.delete(`/api/member/search?keyword=${keyword}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [RECENT_SEARCHES] });
+    },
+    onError: (error) => {
+      console.error('검색어 삭제 실패:', error);
+    },
+  });
 
   const handleClickLogo = () => {
     navigate('/');
@@ -78,23 +97,25 @@ const ResponsiveHeader = () => {
     if (e.key === 'Enter') {
       navigate(`/search/${searchText}`);
       setIsSearchClicked(false);
+      queryClient.invalidateQueries({ queryKey: [RECENT_SEARCHES] });
     }
   };
   const clickSearchIcon = () => {
     navigate(`/search/${searchText}`);
     setIsSearchClicked(false);
+    queryClient.invalidateQueries({ queryKey: [RECENT_SEARCHES] });
   };
 
   const handleDelKeyword = (keyword: string) => {
     // delSearch(): 해당 키워드 서버에서 삭제
-    delSearch(keyword).then((_) => getSearch());
+    deleteSearchMutation.mutate(keyword);
   };
 
   const clickKeyword = (v: string) => {
     setSearchText(v);
-    // console.log('searchText:', searchText, v);
     navigate(`/search/${v}`);
     setIsSearchClicked(false);
+    queryClient.invalidateQueries({ queryKey: [RECENT_SEARCHES] });
   };
 
   const handleOpenModal = () => {
@@ -104,16 +125,6 @@ const ResponsiveHeader = () => {
     if (!isAuthenticated) handleOpenModal();
     else logout();
   };
-
-  // 시작하자마자 호출될 API
-  useEffect(() => {
-    getSearch();
-  }, [isAuthenticated]);
-
-  // 검색할 때마다 최신 검색어 갱신
-  useEffect(() => {
-    getSearch();
-  }, [isSearchCompleted]);
 
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
